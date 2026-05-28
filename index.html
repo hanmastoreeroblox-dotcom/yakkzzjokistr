@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>YAKKZZ STORE - Blox Fruits Joki Service | SALE 20%</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: linear-gradient(135deg, #0f0c29 0%, #1a1a3e 50%, #2a1f4a 100%);
+            min-height: 100vh; 
+            color: #ffffff;
+        }
+        
+        .card-premium { 
+            background: rgba(30, 25, 55, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 1.5rem; 
+            border: 1px solid rgba(251, 191, 36, 0.25); 
+            transition: all 0.3s cubic-bezier(0.2, 0.85, 0.32, 1.2); 
+            overflow: hidden;
+        }
+        
+        .card-premium:hover { 
+            transform: translateY(-6px); 
+            border-color: rgba(251, 191, 36, 0.6); 
+            box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.5);
+            background: rgba(40, 35, 70, 0.9);
+        }
+        
+        .btn-premium { 
+            background: linear-gradient(135deg, #fbbf24, #f59e0b); 
+            transition: all 0.3s ease; 
+            color: #1a1a2e; 
+            font-weight: 700; 
+            border: none;
+        }
+        
+        .btn-premium:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 10px 20px -5px rgba(251, 191, 36, 0.4);
+            filter: brightness(1.05);
+        }
+        
+        .tab-premium { 
+            background: rgba(30, 25, 55, 0.7); 
+            transition: all 0.25s ease; 
+            border: 1px solid rgba(251, 191, 36, 0.3); 
+            color: #ffffff; 
+            border-radius: 9999px; 
+            font-weight: 600; 
+        }
+        
+        .tab-premium:hover { 
+            border-color: #fbbf24; 
+            background: rgba(251, 191, 36, 0.2);
+        }
+        
+        .tab-active-premium { 
+            background: linear-gradient(135deg, #fbbf24, #f59e0b) !important; 
+            color: #1a1a2e !important; 
+            border-color: transparent !important; 
+        }
+        
+        .glass-premium { 
+            background: rgba(20, 15, 45, 0.9); 
+            backdrop-filter: blur(15px); 
+            border-bottom: 1px solid rgba(251, 191, 36, 0.3);
+        }
+        
+        .input-premium { 
+            background: rgba(255, 255, 255, 0.1); 
+            border: 2px solid rgba(255, 255, 255, 0.15); 
+            border-radius: 1rem; 
+            color: #ffffff;
+        }
+        
+        .input-premium:focus { 
+            border-color: #fbbf24; 
+            box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.2); 
+            outline: none; 
+        }
+        
+        .input-premium::placeholder { color: rgba(255, 255, 255, 0.5); }
+        
+        .input-valid { border-color: #22c55e !important; background: rgba(34, 197, 94, 0.15) !important; }
+        .input-invalid { border-color: #ef4444 !important; background: rgba(239, 68, 68, 0.1) !important; }
+        
+        .stat-card { 
+            background: rgba(30, 25, 55, 0.75);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(251, 191, 36, 0.2);
+            border-radius: 1.25rem;
+        }
+        .stat-card:hover { border-color: #fbbf24; transform: translateY(-3px); }
+        
+        .status-online { background: #22c55e; box-shadow: 0 0 6px #22c55e; }
+        .status-offline { background: #ef4444; box-shadow: 0 0 6px #ef4444; }
+        
+        .toggle-switch { width: 48px; height: 24px; background: #4a4a6a; border-radius: 30px; display: flex; align-items: center; padding: 3px; cursor: pointer; }
+        .toggle-switch.active { background: #22c55e; }
+        .toggle-knob { width: 18px; height: 18px; background: white; border-radius: 50%; transition: transform 0.3s; }
+        .toggle-switch.active .toggle-knob { transform: translateX(24px); }
+        
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .fab-wa { background: linear-gradient(135deg, #25D366, #128C7E); }
+        .fab-top { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
+        
+        .tutorial-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; }
+        .tutorial-content.open { max-height: 500px; }
+        
+        .cart-badge { position: absolute; top: -6px; right: -8px; background: #ef4444; color: white; font-size: 9px; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        
+        .text-gradient { background: linear-gradient(135deg, #fbbf24, #f59e0b); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        
+        .price-original { text-decoration: line-through; font-size: 10px; color: #9ca3af; }
+        .price-discount { color: #f87171; font-size: 14px; font-weight: bold; }
+        .price-final { color: #fbbf24; font-size: 16px; font-weight: bold; }
+        
+        .product-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+        
+        .discount-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 20px;
+            z-index: 10;
+        }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in { animation: fadeInUp 0.5s ease-out forwards; }
+        
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #1a1a3e; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(135deg, #fbbf24, #f59e0b); border-radius: 10px; }
+        
+        .badge-menunggu { background: #fef3c7; color: #b45309; padding: 4px 12px; border-radius: 999px; font-size: 10px; font-weight: bold; }
+        .badge-proses { background: #dbeafe; color: #1e40af; padding: 4px 12px; border-radius: 999px; font-size: 10px; font-weight: bold; }
+        .badge-selesai { background: #dcfce7; color: #15803d; padding: 4px 12px; border-radius: 999px; font-size: 10px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<!-- ADMIN MODE -->
+<div id="adminMode" class="hidden min-h-screen">
+    <div class="glass-premium sticky top-0 z-50 px-5 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-white font-bold text-lg">A</div>
+            <div><h1 class="text-lg font-bold text-white">ADMIN PANEL</h1><p class="text-[10px] text-gray-300">YAKKZZ STORE</p></div>
+        </div>
+        <div class="flex items-center gap-4">
+            <div class="flex items-center gap-2">
+                <span class="text-xs text-gray-300">Status:</span>
+                <div id="adminStatusToggle" class="toggle-switch active" onclick="toggleStoreStatus()"><div class="toggle-knob"></div></div>
+                <span id="adminStatusText" class="text-xs text-green-400 font-bold">ONLINE</span>
+            </div>
+            <button onclick="logoutAdmin()" class="bg-gray-700 hover:bg-gray-600 px-3 py-1.5 rounded-lg text-xs transition text-white">Logout</button>
+        </div>
+    </div>
+    <div class="p-5 max-w-6xl mx-auto">
+        <div class="flex gap-3 mb-6 border-b border-gray-700 pb-3">
+            <button onclick="showAdminTab('orders')" id="adminTabOrdersBtn" class="tab-premium tab-active-premium px-5 py-2 rounded-full text-sm font-semibold">📦 Pesanan</button>
+            <button onclick="showAdminTab('reviews')" id="adminTabReviewsBtn" class="tab-premium px-5 py-2 rounded-full text-sm font-semibold">⭐ Review</button>
+        </div>
+        <div class="grid grid-cols-4 gap-4 mb-6">
+            <div class="stat-card p-4 text-center"><i class="fa fa-clock-o text-xl text-amber-400"></i><p class="text-2xl font-bold text-amber-400 mt-1" id="adminMenungguCount">0</p><p class="text-[10px] text-gray-300">Menunggu</p></div>
+            <div class="stat-card p-4 text-center"><i class="fa fa-spinner text-xl text-blue-400"></i><p class="text-2xl font-bold text-blue-400 mt-1" id="adminProsesCount">0</p><p class="text-[10px] text-gray-300">Diproses</p></div>
+            <div class="stat-card p-4 text-center"><i class="fa fa-check-circle text-xl text-green-400"></i><p class="text-2xl font-bold text-green-400 mt-1" id="adminSelesaiCount">0</p><p class="text-[10px] text-gray-300">Selesai</p></div>
+            <div class="stat-card p-4 text-center"><i class="fa fa-money text-xl text-amber-400"></i><p class="text-2xl font-bold text-amber-400 mt-1" id="adminTotalDana">Rp 0</p><p class="text-[10px] text-gray-300">Total Dana</p></div>
+        </div>
+        <div id="adminOrdersContainer"><div id="adminOrdersList" class="space-y-3"></div></div>
+        <div id="adminReviewsContainer" class="hidden"><div id="adminReviewsList" class="space-y-3"></div></div>
+    </div>
+</div>
+
+<!-- USER MODE -->
+<div id="userMode" class="min-h-screen">
+    <!-- Header -->
+    <div class="glass-premium sticky top-0 z-50 px-5 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-white font-bold text-xl">Y</div>
+            <div>
+                <h1 class="text-xl font-bold text-white">YAKKZZ <span class="text-gradient">STORE</span></h1>
+                <p class="text-[9px] text-gray-300">Blox Fruits Joki Service</p>
+            </div>
+            <div class="flex items-center gap-1 bg-green-500/20 px-2.5 py-1 rounded-full">
+                <span id="userStatusDot" class="w-1.5 h-1.5 rounded-full status-online"></span>
+                <span id="userStatusText" class="text-[8px] text-green-400 font-bold">ONLINE</span>
+            </div>
+        </div>
+        <div class="flex gap-4">
+            <button onclick="openCart()" class="relative text-gray-200 hover:text-amber-400 transition"><i class="fa fa-shopping-cart text-xl"></i><span id="cartBadge" class="cart-badge">0</span></button>
+            <button onclick="openOrders()" class="relative text-gray-200 hover:text-amber-400 transition"><i class="fa fa-file-text-o text-xl"></i><span id="orderBadge" class="cart-badge" style="background: #fbbf24; color:#1a1a2e">0</span></button>
+            <button onclick="openReviewModal()" class="text-gray-200 hover:text-amber-400 transition"><i class="fa fa-star text-xl"></i></button>
+            <button onclick="showAdminLogin()" class="text-gray-200 hover:text-amber-400 transition"><i class="fa fa-lock text-xl"></i></button>
+            <a href="https://wa.me/62895622759784" target="_blank" class="text-gray-200 hover:text-green-400 transition"><i class="fa fa-whatsapp text-xl"></i></a>
+        </div>
+    </div>
+
+    <!-- BANNER DISKON 20% -->
+    <div class="bg-gradient-to-r from-red-600 to-orange-500 py-3 px-5 text-center animate-pulse">
+        <p class="text-white font-bold text-sm"><i class="fa fa-fire"></i> 🔥 PROMO SPESIAL! SEMUA JOKI DISKON 20% 🔥 <i class="fa fa-fire"></i></p>
+        <p class="text-white text-[10px] opacity-90">Berlaku untuk semua layanan joki! Harga sudah dipotong 20%</p>
+    </div>
+
+    <!-- Offline Banner -->
+    <div id="offlineBanner" class="hidden bg-amber-500/20 border-b border-amber-500/30 py-2 text-center">
+        <p class="text-xs text-amber-300"><i class="fa fa-exclamation-triangle"></i> ⚠️ TOKO SEDANG OFFLINE - Pesan tetap masuk, diproses nanti ⚠️</p>
+    </div>
+
+    <!-- Hero -->
+    <section class="px-5 py-8 text-center">
+        <div class="animate-fade-in">
+            <h2 class="text-3xl font-bold mb-2 text-white">YAKKZZ <span class="text-gradient">STORE</span></h2>
+            <p class="text-gray-300 text-sm">⚡ Blox Fruits Joki • Fast • Aman • Berpengalaman ⚡</p>
+            <div class="flex justify-center gap-2 mt-3">
+                <div class="w-12 h-0.5 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full"></div>
+                <div class="w-6 h-0.5 bg-amber-400 rounded-full"></div>
+                <div class="w-12 h-0.5 bg-gradient-to-r from-orange-500 to-amber-500 rounded-full"></div>
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-3 gap-3 mt-6">
+            <div class="stat-card p-3"><i class="fa fa-check-circle text-xl text-green-400"></i><p class="text-xl font-bold text-amber-400 mt-1" id="totalOrdersStat">0</p><p class="text-[9px] text-gray-300">Pesanan Selesai</p></div>
+            <div class="stat-card p-3"><i class="fa fa-users text-xl text-amber-400"></i><p class="text-xl font-bold text-amber-400 mt-1" id="totalCustomersStat">0</p><p class="text-[9px] text-gray-300">Pelanggan Puas</p></div>
+            <div class="stat-card p-3"><i class="fa fa-clock-o text-xl text-green-400"></i><p class="text-xl font-bold text-green-400 mt-1">24/7</p><p class="text-[9px] text-gray-300">Support</p></div>
+        </div>
+        
+        <div class="mt-4 glass-premium rounded-xl p-3">
+            <p class="text-sm text-gray-200">📞 <a href="https://wa.me/62895622759784" class="font-bold text-amber-400 hover:text-amber-300">+62 895-6227-59784</a></p>
+        </div>
+        
+        <div class="grid grid-cols-2 gap-3 mt-4">
+            <a href="#services" class="btn-premium py-3 rounded-xl text-center font-bold shadow-md">🛒 Mulai Order</a>
+            <a href="https://wa.me/62895622759784" target="_blank" class="bg-gradient-to-r from-green-600 to-emerald-700 text-white font-bold py-3 rounded-xl text-center hover:scale-105 transition shadow-md">💬 Tanya Admin</a>
+        </div>
+    </section>
+
+    <!-- Review -->
+    <section class="px-5 mb-6 max-w-lg mx-auto">
+        <div class="flex justify-between items-center mb-3">
+            <h3 class="font-bold text-white"><i class="fa fa-star text-amber-400 mr-1"></i> Review Customer</h3>
+            <button onclick="openReviewModal()" class="text-xs text-amber-400 font-medium hover:text-amber-300">+ Tulis Review</button>
+        </div>
+        <div id="reviewsDisplay" class="space-y-2 max-h-64 overflow-y-auto"></div>
+    </section>
+
+    <!-- Search -->
+    <section class="px-5 mb-4 max-w-lg mx-auto">
+        <div class="relative">
+            <i class="fa fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+            <input type="text" id="searchInput" placeholder="🔍 Cari produk (level, mastery, sword, race...)" class="input-premium w-full py-3 pl-10 pr-4 text-sm">
+        </div>
+    </section>
+
+    <!-- Tabs -->
+    <div class="px-4 max-w-lg mx-auto">
+        <div class="flex overflow-x-auto scrollbar-hide gap-2 mb-5 pb-2">
+            <button class="tab-premium tab-active-premium px-4 py-2 text-xs font-semibold whitespace-nowrap" data-tab="all">🔥 SEMUA</button>
+            <button class="tab-premium px-4 py-2 text-xs font-semibold whitespace-nowrap" data-tab="level">📈 Level</button>
+            <button class="tab-premium px-4 py-2 text-xs font-semibold whitespace-nowrap" data-tab="mastery">⭐ Mastery</button>
+            <button class="tab-premium px-4 py-2 text-xs font-semibold whitespace-nowrap" data-tab="race">👽 Race</button>
+            <button class="tab-premium px-4 py-2 text-xs font-semibold whitespace-nowrap" data-tab="sword">⚔️ Sword</button>
+            <button class="tab-premium px-4 py-2 text-xs font-semibold whitespace-nowrap" data-tab="gun">🔫 Gun</button>
+            <button class="tab-premium px-4 py-2 text-xs font-semibold whitespace-nowrap" data-tab="fighting">👊 Fighting</button>
+            <button class="tab-premium px-4 py-2 text-xs font-semibold whitespace-nowrap" data-tab="raid">💣 Raid</button>
+            <button class="tab-premium px-4 py-2 text-xs font-semibold whitespace-nowrap" data-tab="boss">👹 Boss</button>
+            <button class="tab-premium px-4 py-2 text-xs font-semibold whitespace-nowrap" data-tab="aksesoris">💍 Aksesoris</button>
+            <button class="tab-premium px-4 py-2 text-xs font-semibold whitespace-nowrap" data-tab="uang">💰 Uang</button>
+            <button class="tab-premium px-4 py-2 text-xs font-semibold whitespace-nowrap" data-tab="bahan">📦 Bahan</button>
+            <button class="tab-premium px-4 py-2 text-xs font-semibold whitespace-nowrap" data-tab="paket">🎁 Paket</button>
+        </div>
+    </div>
+
+    <!-- Products Grid -->
+    <main id="services" class="px-4 pb-32 max-w-lg mx-auto">
+        <div id="productGrid" class="grid grid-cols-2 gap-4"></div>
+    </main>
+
+    <!-- Floating Buttons -->
+    <a href="https://wa.me/62895622759784" target="_blank" class="fixed bottom-5 right-5 w-14 h-14 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition z-50 fab-wa"><i class="fa fa-whatsapp text-white text-2xl"></i></a>
+    <button onclick="window.scrollTo({top:0,behavior:'smooth'})" class="fixed bottom-24 right-5 w-10 h-10 rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition z-50 fab-top text-black"><i class="fa fa-arrow-up"></i></button>
+</div>
+
+<!-- Cart Modal -->
+<div id="cartModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden items-center justify-center p-4" onclick="if(event.target===this) closeCart()">
+    <div class="bg-[#1a1a3e] rounded-2xl max-w-md w-full max-h-[80vh] flex flex-col">
+        <div class="p-4 border-b border-gray-700 flex justify-between"><h3 class="font-bold text-white text-lg"><i class="fa fa-shopping-cart text-amber-400 mr-2"></i> Keranjang</h3><button onclick="closeCart()" class="text-gray-400 text-2xl hover:text-white">&times;</button></div>
+        <div id="cartItems" class="flex-1 overflow-y-auto p-4 space-y-2"></div>
+        <div class="p-4 border-t border-gray-700">
+            <div class="flex justify-between mb-2"><span class="text-gray-400 text-sm">Subtotal:</span><span id="cartSubtotal" class="text-gray-300 text-sm">Rp 0</span></div>
+            <div class="flex justify-between mb-3"><span class="text-green-400 text-sm">Diskon 20%:</span><span id="cartDiscount" class="text-green-400 text-sm">- Rp 0</span></div>
+            <div class="flex justify-between mb-3 pt-2 border-t border-gray-700"><span class="text-white font-bold">Total:</span><span id="cartTotal" class="text-amber-400 font-bold text-xl">Rp 0</span></div>
+            <button onclick="showJokiForm()" class="btn-premium w-full py-3 rounded-xl font-bold">✅ Lanjut ke Form Joki</button>
+        </div>
+    </div>
+</div>
+
+<!-- Joki Form Modal -->
+<div id="jokiFormModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden items-center justify-center p-4" onclick="if(event.target===this) closeJokiForm()">
+    <div class="bg-[#1a1a3e] rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+        <div class="p-5 border-b border-gray-700 sticky top-0 bg-[#1a1a3e]"><h3 class="font-bold text-white text-lg"><i class="fa fa-file-text text-amber-400 mr-2"></i> FORMAT JOKI</h3></div>
+        <div class="p-5">
+            <div class="bg-red-500/20 border border-red-500/30 rounded-xl p-3 mb-4 text-center text-xs text-red-300 font-medium">
+                ⚠️ DILARANG LOGIN / TABRAK AKUN SELAMA PROSES<br>
+                🚨 WAJIB mengisi 3 kolom Backup Code SEMUANYA!<br>
+                📌 Punya backup code asli → isi kode nya<br>
+                📌 DATPOL / GA PUNYA → tulis: <span class="font-bold text-red-300">GA ADA</span> (di 3 kolom)
+            </div>
+            
+            <input type="text" id="formUser" class="input-premium w-full rounded-xl p-3 mb-3 text-sm" placeholder="USERNAME / ID ROBLOX *">
+            <input type="text" id="formPass" class="input-premium w-full rounded-xl p-3 mb-3 text-sm" placeholder="PASSWORD *">
+            <textarea id="formNote" rows="2" class="input-premium w-full rounded-xl p-3 mb-3 text-sm" placeholder="CATATAN (level berapa, item yang diinginkan) *"></textarea>
+            
+            <input type="text" id="formBackup1" class="input-premium w-full rounded-xl p-3 mb-2 text-sm input-invalid" placeholder="BACKUP CODE 1 / GA ADA *" oninput="validateBackupFields()">
+            <input type="text" id="formBackup2" class="input-premium w-full rounded-xl p-3 mb-2 text-sm input-invalid" placeholder="BACKUP CODE 2 / GA ADA *" oninput="validateBackupFields()">
+            <input type="text" id="formBackup3" class="input-premium w-full rounded-xl p-3 mb-3 text-sm input-invalid" placeholder="BACKUP CODE 3 / GA ADA *" oninput="validateBackupFields()">
+            <p id="backupStatusText" class="text-xs mt-1 text-red-400 font-medium">⚠️ 3 kolom Backup Code WAJIB diisi semua! (isi GA ADA jika tidak punya)</p>
+            
+            <div class="bg-blue-500/20 border border-blue-500/30 rounded-xl mb-4 overflow-hidden mt-4">
+                <div class="tutorial-header p-3 flex justify-between items-center" onclick="toggleTutorial()">
+                    <span class="text-xs font-bold text-blue-300"><i class="fa fa-youtube-play text-red-400 mr-1"></i> 📌 TUTORIAL CARA BIKIN BACKUP CODE</span>
+                    <i id="tutorialIcon" class="fa fa-chevron-down text-blue-300 text-xs transition-transform"></i>
+                </div>
+                <div id="tutorialContent" class="tutorial-content px-3 pb-3">
+                    <div class="border-t border-blue-500/30 pt-3">
+                        <div class="relative w-full rounded-xl overflow-hidden shadow-md" style="aspect-ratio:9/16"><iframe class="absolute top-0 left-0 w-full h-full" src="https://www.youtube.com/embed/zWx1MaMREYQ" frameborder="0" allowfullscreen></iframe></div>
+                        <div class="bg-amber-500/20 rounded-lg p-2 mt-3 border border-amber-500/30"><p class="text-[9px] text-amber-300"><i class="fa fa-lightbulb-o mr-1"></i> <span class="font-bold">ATURAN:</span> WAJIB mengisi 3 kolom Backup Code SEMUANYA! Kalau tidak punya tulis <span class="font-bold text-red-300">GA ADA</span> di semua kolom.</p></div>
+                    </div>
+                </div>
+            </div>
+            
+            <button onclick="submitJokiForm()" class="btn-premium w-full py-3 rounded-xl font-bold">✅ Lanjut ke Pembayaran</button>
+            <button onclick="closeJokiForm()" class="w-full mt-2 bg-gray-700 hover:bg-gray-600 py-3 rounded-xl text-sm font-medium transition text-white">Batal</button>
+        </div>
+    </div>
+</div>
+
+<!-- Payment Modal -->
+<div id="paymentModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden items-center justify-center p-4" onclick="if(event.target===this) closePaymentModal()">
+    <div class="bg-[#1a1a3e] rounded-2xl max-w-md w-full">
+        <div class="p-4 border-b border-gray-700"><h3 class="font-bold text-white text-lg"><i class="fa fa-qrcode text-amber-400 mr-2"></i> QRIS Payment</h3></div>
+        <div class="p-5 text-center">
+            <div class="bg-gray-800 rounded-xl p-3 mb-3"><p class="text-xs text-gray-300">YAKKZZOFC | NMID: ID1025451602516 | A01</p></div>
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=YAKKZZOFC%7CNMID%3AID1025451602516%7CA01" alt="QRIS" class="w-48 h-48 mx-auto">
+            <p class="text-sm font-bold text-white mt-3">Scan QRIS untuk pembayaran</p>
+            <p class="text-xs text-gray-300 mt-1">Setelah bayar, kirim bukti ke WhatsApp admin</p>
+            <button onclick="closePaymentModal()" class="btn-premium w-full py-3 rounded-xl font-bold mt-4">Tutup</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// ==================== DISKON 20% ====================
+const DISCOUNT = 0.2; // 20%
+
+function applyDiscount(originalPrice) {
+    return Math.floor(originalPrice * (1 - DISCOUNT));
+}
+
+// ==================== ALL PRODUCTS (LENGKAP DENGAN DISKON) ====================
+const productsRaw = [
+    // LEVEL
+    { id: 1, name: "100 Level (Sea 1)", originalPrice: 4000, category: "level", desc: "Naik 100 level di Sea 1", icon: "fa-line-chart", color: "from-blue-600 to-cyan-500" },
+    { id: 2, name: "100 Level (Sea 2)", originalPrice: 4000, category: "level", desc: "Naik 100 level di Sea 2", icon: "fa-line-chart", color: "from-blue-600 to-cyan-500" },
+    { id: 3, name: "100 Level (Sea 3)", originalPrice: 4000, category: "level", desc: "Naik 100 level di Sea 3", icon: "fa-line-chart", color: "from-blue-600 to-cyan-500" },
+    { id: 4, name: "500 Level", originalPrice: 22000, category: "level", desc: "Naik 500 level", icon: "fa-line-chart", color: "from-blue-600 to-cyan-500" },
+    { id: 5, name: "1000 Level", originalPrice: 41000, category: "level", desc: "Naik 1000 level", icon: "fa-line-chart", color: "from-blue-600 to-cyan-500" },
+    // MASTERY FRUIT
+    { id: 10, name: "Mastery Fruit 100 (Bisa M1)", originalPrice: 2000, category: "mastery", desc: "100 mastery Fruit (bisa pakai M1)", icon: "fa-star", color: "from-amber-500 to-yellow-500" },
+    { id: 11, name: "Mastery Fruit 500 (Bisa M1)", originalPrice: 9000, category: "mastery", desc: "500 mastery Fruit (bisa pakai M1)", icon: "fa-star", color: "from-amber-500 to-yellow-500" },
+    { id: 12, name: "Mastery Fruit 100 (Gak Bisa M1)", originalPrice: 3000, category: "mastery", desc: "100 mastery Fruit (tidak bisa M1)", icon: "fa-star", color: "from-amber-500 to-yellow-500" },
+    { id: 13, name: "Mastery Fruit 500 (Gak Bisa M1)", originalPrice: 14000, category: "mastery", desc: "500 mastery Fruit (tidak bisa M1)", icon: "fa-star", color: "from-amber-500 to-yellow-500" },
+    // MASTERY SWORD
+    { id: 14, name: "Mastery Sword 100", originalPrice: 2000, category: "mastery", desc: "100 mastery Sword", icon: "fa-star", color: "from-amber-500 to-yellow-500" },
+    { id: 15, name: "Mastery Sword 500", originalPrice: 9000, category: "mastery", desc: "500 mastery Sword", icon: "fa-star", color: "from-amber-500 to-yellow-500" },
+    // MASTERY FIGHTING
+    { id: 16, name: "Mastery Fighting 100", originalPrice: 2000, category: "mastery", desc: "100 mastery Fighting Style", icon: "fa-star", color: "from-amber-500 to-yellow-500" },
+    { id: 17, name: "Mastery Fighting 500", originalPrice: 8000, category: "mastery", desc: "500 mastery Fighting Style", icon: "fa-star", color: "from-amber-500 to-yellow-500" },
+    // MASTERY GUN
+    { id: 18, name: "Mastery Gun 100", originalPrice: 2000, category: "mastery", desc: "100 mastery Gun", icon: "fa-star", color: "from-amber-500 to-yellow-500" },
+    { id: 19, name: "Mastery Gun 500", originalPrice: 9000, category: "mastery", desc: "500 mastery Gun", icon: "fa-star", color: "from-amber-500 to-yellow-500" },
+    // RACE BIASA
+    { id: 20, name: "Race V1 ke V2", originalPrice: 5000, category: "race", desc: "Upgrade race biasa V1 ke V2", icon: "fa-user-circle-o", color: "from-purple-600 to-pink-500" },
+    { id: 21, name: "Race V2 ke V3", originalPrice: 9000, category: "race", desc: "Upgrade race biasa V2 ke V3", icon: "fa-user-circle-o", color: "from-purple-600 to-pink-500" },
+    { id: 22, name: "Race V3 ke V4", originalPrice: 41000, category: "race", desc: "Upgrade race biasa V3 ke V4 saja", icon: "fa-user-circle-o", color: "from-purple-600 to-pink-500" },
+    { id: 23, name: "Race V4 Full Gear", originalPrice: 52000, category: "race", desc: "Race V4 lengkap semua gear", icon: "fa-user-circle-o", color: "from-purple-600 to-pink-500" },
+    // RACE GHOUL
+    { id: 24, name: "Ghoul Dapatkan V1", originalPrice: 14000, category: "race", desc: "Buka race Ghoul V1", icon: "fa-user-circle-o", color: "from-green-600 to-emerald-500" },
+    { id: 25, name: "Ghoul V1 ke V2", originalPrice: 7000, category: "race", desc: "Upgrade Ghoul V1 ke V2", icon: "fa-user-circle-o", color: "from-green-600 to-emerald-500" },
+    { id: 26, name: "Ghoul V2 ke V3", originalPrice: 9000, category: "race", desc: "Upgrade Ghoul V2 ke V3", icon: "fa-user-circle-o", color: "from-green-600 to-emerald-500" },
+    { id: 27, name: "Ghoul V3 ke V4", originalPrice: 44000, category: "race", desc: "Upgrade Ghoul V3 ke V4 saja", icon: "fa-user-circle-o", color: "from-green-600 to-emerald-500" },
+    { id: 28, name: "Ghoul V4 Full Gear", originalPrice: 57000, category: "race", desc: "Ghoul V4 lengkap gear", icon: "fa-user-circle-o", color: "from-green-600 to-emerald-500" },
+    // RACE CYBORG
+    { id: 29, name: "Cyborg Dapatkan V1", originalPrice: 17000, category: "race", desc: "Buka race Cyborg V1", icon: "fa-user-circle-o", color: "from-cyan-600 to-blue-500" },
+    { id: 30, name: "Cyborg V1 ke V2", originalPrice: 8000, category: "race", desc: "Upgrade Cyborg V1 ke V2", icon: "fa-user-circle-o", color: "from-cyan-600 to-blue-500" },
+    { id: 31, name: "Cyborg V2 ke V3", originalPrice: 11000, category: "race", desc: "Upgrade Cyborg V2 ke V3", icon: "fa-user-circle-o", color: "from-cyan-600 to-blue-500" },
+    { id: 32, name: "Cyborg V3 ke V4", originalPrice: 49000, category: "race", desc: "Upgrade Cyborg V3 ke V4 saja", icon: "fa-user-circle-o", color: "from-cyan-600 to-blue-500" },
+    { id: 33, name: "Cyborg V4 Full Gear", originalPrice: 62000, category: "race", desc: "Cyborg V4 lengkap gear", icon: "fa-user-circle-o", color: "from-cyan-600 to-blue-500" },
+    // RACE DRACO
+    { id: 34, name: "Draco Dapatkan V1", originalPrice: 20000, category: "race", desc: "Buka race Draco V1", icon: "fa-dragon", color: "from-red-600 to-orange-500" },
+    { id: 35, name: "Draco V1 ke V2", originalPrice: 9000, category: "race", desc: "Upgrade Draco V1 ke V2", icon: "fa-dragon", color: "from-red-600 to-orange-500" },
+    { id: 36, name: "Draco V2 ke V3", originalPrice: 13000, category: "race", desc: "Upgrade Draco V2 ke V3", icon: "fa-dragon", color: "from-red-600 to-orange-500" },
+    { id: 37, name: "Draco V3 ke V4 (Syarat Lengkap)", originalPrice: 55000, category: "race", desc: "Draco V3 ke V4 (syarat sudah lengkap)", icon: "fa-dragon", color: "from-red-600 to-orange-500" },
+    { id: 38, name: "Draco V3 ke V4 (Belum Syarat)", originalPrice: 77000, category: "race", desc: "Draco V3 ke V4 + bantuin penuhi syarat (+22k)", icon: "fa-dragon", color: "from-red-600 to-orange-500" },
+    { id: 39, name: "Draco V4 Full Gear (Syarat Lengkap)", originalPrice: 72000, category: "race", desc: "Draco V4 full gear (syarat lengkap)", icon: "fa-dragon", color: "from-red-600 to-orange-500" },
+    { id: 40, name: "Draco V4 Full Gear (Belum Syarat)", originalPrice: 94000, category: "race", desc: "Draco V4 full gear + bantuin penuhi syarat (+22k)", icon: "fa-dragon", color: "from-red-600 to-orange-500" },
+    // TRIAL V4
+    { id: 41, name: "1x Trial V4", originalPrice: 8000, category: "race", desc: "1x trial race V4 (bawa fragmen sendiri)", icon: "fa-trophy", color: "from-amber-600 to-yellow-500" },
+    // SWORD
+    { id: 50, name: "Cursed Dual Katana (CDK)", originalPrice: 34000, category: "sword", desc: "Cursed Dual Katana", icon: "fa-shield", color: "from-violet-600 to-purple-500" },
+    { id: 51, name: "True Triple Katana (TTK)", originalPrice: 34000, category: "sword", desc: "True Triple Katana", icon: "fa-shield", color: "from-violet-600 to-purple-500" },
+    { id: 52, name: "Dragonheart", originalPrice: 34000, category: "sword", desc: "Dragonheart", icon: "fa-shield", color: "from-violet-600 to-purple-500" },
+    { id: 53, name: "Hallow Scythe", originalPrice: 27000, category: "sword", desc: "Hallow Scythe", icon: "fa-shield", color: "from-violet-600 to-purple-500" },
+    { id: 54, name: "Shark Anchor", originalPrice: 22000, category: "sword", desc: "Shark Anchor", icon: "fa-shield", color: "from-violet-600 to-purple-500" },
+    { id: 55, name: "Tushita", originalPrice: 16000, category: "sword", desc: "Tushita", icon: "fa-shield", color: "from-violet-600 to-purple-500" },
+    { id: 56, name: "Yama", originalPrice: 16000, category: "sword", desc: "Yama", icon: "fa-shield", color: "from-violet-600 to-purple-500" },
+    { id: 57, name: "Spikey Trident", originalPrice: 14000, category: "sword", desc: "Spikey Trident", icon: "fa-shield", color: "from-violet-600 to-purple-500" },
+    { id: 58, name: "Pole V2", originalPrice: 14000, category: "sword", desc: "Pole V2", icon: "fa-shield", color: "from-violet-600 to-purple-500" },
+    { id: 59, name: "Saishi / Sizhu / Oroshi", originalPrice: 14000, category: "sword", desc: "Pilih 1: Saishi, Sizhu, atau Oroshi", icon: "fa-shield", color: "from-violet-600 to-purple-500" },
+    { id: 60, name: "Dragon Trident", originalPrice: 11000, category: "sword", desc: "Dragon Trident", icon: "fa-shield", color: "from-violet-600 to-purple-500" },
+    { id: 61, name: "Rengoku", originalPrice: 8000, category: "sword", desc: "Rengoku", icon: "fa-shield", color: "from-violet-600 to-purple-500" },
+    { id: 62, name: "Gravity Cane", originalPrice: 8000, category: "sword", desc: "Gravity Cane", icon: "fa-shield", color: "from-violet-600 to-purple-500" },
+    { id: 63, name: "Pole V1", originalPrice: 8000, category: "sword", desc: "Pole V1", icon: "fa-shield", color: "from-violet-600 to-purple-500" },
+    { id: 64, name: "Saber", originalPrice: 4000, category: "sword", desc: "Saber", icon: "fa-shield", color: "from-violet-600 to-purple-500" },
+    { id: 65, name: "Dark Blade V2", originalPrice: 22000, category: "sword", desc: "Upgrade Dark Blade ke V2", icon: "fa-shield", color: "from-violet-600 to-purple-500" },
+    { id: 66, name: "Bisento V2", originalPrice: 11000, category: "sword", desc: "Upgrade Bisento ke V2", icon: "fa-shield", color: "from-violet-600 to-purple-500" },
+    // GUN
+    { id: 70, name: "Acidum Rifle", originalPrice: 27000, category: "gun", desc: "Acidum Rifle", icon: "fa-bullseye", color: "from-emerald-600 to-teal-500" },
+    { id: 71, name: "Bizarre Revolver", originalPrice: 16000, category: "gun", desc: "Bizarre Revolver", icon: "fa-bullseye", color: "from-emerald-600 to-teal-500" },
+    { id: 72, name: "Kabucha", originalPrice: 14000, category: "gun", desc: "Kabucha", icon: "fa-bullseye", color: "from-emerald-600 to-teal-500" },
+    { id: 73, name: "Dragonstorm", originalPrice: 34000, category: "gun", desc: "Dragonstorm", icon: "fa-bullseye", color: "from-emerald-600 to-teal-500" },
+    { id: 74, name: "Venom Bow", originalPrice: 22000, category: "gun", desc: "Venom Bow", icon: "fa-bullseye", color: "from-emerald-600 to-teal-500" },
+    { id: 75, name: "Soul Guitar", originalPrice: 34000, category: "gun", desc: "Soul Guitar", icon: "fa-bullseye", color: "from-emerald-600 to-teal-500" },
+    { id: 76, name: "Bazooka", originalPrice: 14000, category: "gun", desc: "Bazooka", icon: "fa-bullseye", color: "from-emerald-600 to-teal-500" },
+    { id: 77, name: "Magma Blaster", originalPrice: 14000, category: "gun", desc: "Magma Blaster", icon: "fa-bullseye", color: "from-emerald-600 to-teal-500" },
+    { id: 78, name: "Dual Flintlock", originalPrice: 11000, category: "gun", desc: "Dual Flintlock", icon: "fa-bullseye", color: "from-emerald-600 to-teal-500" },
+    { id: 79, name: "Refined Slingshot", originalPrice: 11000, category: "gun", desc: "Refined Slingshot", icon: "fa-bullseye", color: "from-emerald-600 to-teal-500" },
+    { id: 80, name: "Cannon", originalPrice: 14000, category: "gun", desc: "Cannon", icon: "fa-bullseye", color: "from-emerald-600 to-teal-500" },
+    { id: 81, name: "Musket", originalPrice: 8000, category: "gun", desc: "Musket", icon: "fa-bullseye", color: "from-emerald-600 to-teal-500" },
+    { id: 82, name: "Flintlock", originalPrice: 8000, category: "gun", desc: "Flintlock", icon: "fa-bullseye", color: "from-emerald-600 to-teal-500" },
+    { id: 83, name: "Slingshot", originalPrice: 4000, category: "gun", desc: "Slingshot", icon: "fa-bullseye", color: "from-emerald-600 to-teal-500" },
+    // FIGHTING
+    { id: 90, name: "Sanguine Art", originalPrice: 67000, category: "fighting", desc: "Sanguine Art", icon: "fa-fist-raised", color: "from-red-600 to-rose-500" },
+    { id: 91, name: "Godhuman", originalPrice: 34000, category: "fighting", desc: "Godhuman", icon: "fa-fist-raised", color: "from-red-600 to-rose-500" },
+    { id: 92, name: "Superhuman", originalPrice: 16000, category: "fighting", desc: "Superhuman", icon: "fa-fist-raised", color: "from-red-600 to-rose-500" },
+    { id: 93, name: "Dragon Talon", originalPrice: 11000, category: "fighting", desc: "Dragon Talon", icon: "fa-fist-raised", color: "from-red-600 to-rose-500" },
+    { id: 94, name: "Sharkman Karate", originalPrice: 11000, category: "fighting", desc: "Sharkman Karate", icon: "fa-fist-raised", color: "from-red-600 to-rose-500" },
+    { id: 95, name: "Death Step", originalPrice: 11000, category: "fighting", desc: "Death Step", icon: "fa-fist-raised", color: "from-red-600 to-rose-500" },
+    { id: 96, name: "Electric Claw", originalPrice: 11000, category: "fighting", desc: "Electric Claw", icon: "fa-fist-raised", color: "from-red-600 to-rose-500" },
+    { id: 97, name: "Water Kung Fu", originalPrice: 4000, category: "fighting", desc: "Water Kung Fu", icon: "fa-fist-raised", color: "from-red-600 to-rose-500" },
+    { id: 98, name: "Dark Step", originalPrice: 4000, category: "fighting", desc: "Dark Step", icon: "fa-fist-raised", color: "from-red-600 to-rose-500" },
+    { id: 99, name: "Electric", originalPrice: 4000, category: "fighting", desc: "Electric", icon: "fa-fist-raised", color: "from-red-600 to-rose-500" },
+    { id: 100, name: "Combat", originalPrice: 2000, category: "fighting", desc: "Combat", icon: "fa-fist-raised", color: "from-red-600 to-rose-500" },
+    // RAID
+    { id: 110, name: "Raid Biasa (Fruit Dari Saya)", originalPrice: 2000, category: "raid", desc: "1x raid biasa (buah dari saya)", icon: "fa-bomb", color: "from-orange-600 to-red-500" },
+    { id: 111, name: "Raid Biasa (Fruit Dari Anda)", originalPrice: 2000, category: "raid", desc: "1x raid biasa (buah dari Anda)", icon: "fa-bomb", color: "from-orange-600 to-red-500" },
+    { id: 112, name: "Raid Tingkat Lanjut", originalPrice: 3000, category: "raid", desc: "1x raid tingkat lanjut", icon: "fa-bomb", color: "from-orange-600 to-red-500" },
+    { id: 113, name: "1000 Fragmen", originalPrice: 2000, category: "raid", desc: "1000 Fragmen", icon: "fa-bomb", color: "from-orange-600 to-red-500" },
+    { id: 114, name: "5000 Fragmen", originalPrice: 6000, category: "raid", desc: "5000 Fragmen", icon: "fa-bomb", color: "from-orange-600 to-red-500" },
+    // BOSS
+    { id: 120, name: "Kill Rip Indra", originalPrice: 22000, category: "boss", desc: "Kill Rip Indra", icon: "fa-skull", color: "from-red-700 to-rose-600" },
+    { id: 121, name: "Kill Dough King", originalPrice: 22000, category: "boss", desc: "Kill Dough King", icon: "fa-skull", color: "from-red-700 to-rose-600" },
+    { id: 122, name: "Blue Gear", originalPrice: 9000, category: "boss", desc: "Mendapatkan Blue Gear", icon: "fa-cog", color: "from-blue-600 to-cyan-500" },
+    // AKSESORIS
+    { id: 130, name: "Pale Scarf", originalPrice: 12000, category: "aksesoris", desc: "Pale Scarf", icon: "fa-gem", color: "from-cyan-600 to-teal-500" },
+    { id: 131, name: "Holy Crown", originalPrice: 8000, category: "aksesoris", desc: "Holy Crown", icon: "fa-gem", color: "from-cyan-600 to-teal-500" },
+    { id: 132, name: "Pilot Helmet", originalPrice: 12000, category: "aksesoris", desc: "Pilot Helmet", icon: "fa-gem", color: "from-cyan-600 to-teal-500" },
+    { id: 133, name: "Hunter Cape", originalPrice: 9000, category: "aksesoris", desc: "Hunter Cape", icon: "fa-gem", color: "from-cyan-600 to-teal-500" },
+    { id: 134, name: "Headband", originalPrice: 9000, category: "aksesoris", desc: "Headband", icon: "fa-gem", color: "from-cyan-600 to-teal-500" },
+    { id: 135, name: "Valkyrie Helm", originalPrice: 14000, category: "aksesoris", desc: "Valkyrie Helm", icon: "fa-gem", color: "from-cyan-600 to-teal-500" },
+    { id: 136, name: "Blue Spikey Hat", originalPrice: 5000, category: "aksesoris", desc: "Blue Spikey Hat", icon: "fa-gem", color: "from-cyan-600 to-teal-500" },
+    { id: 137, name: "Lei Necklace", originalPrice: 5000, category: "aksesoris", desc: "Lei Necklace", icon: "fa-gem", color: "from-cyan-600 to-teal-500" },
+    { id: 138, name: "Glasses", originalPrice: 5000, category: "aksesoris", desc: "Glasses", icon: "fa-gem", color: "from-cyan-600 to-teal-500" },
+    { id: 139, name: "Sharpshooter Cape", originalPrice: 5000, category: "aksesoris", desc: "Sharpshooter Cape", icon: "fa-gem", color: "from-cyan-600 to-teal-500" },
+    { id: 140, name: "Warrior Helmet", originalPrice: 3000, category: "aksesoris", desc: "Warrior Helmet", icon: "fa-gem", color: "from-cyan-600 to-teal-500" },
+    { id: 141, name: "FULL GEAR AKSESORIS", originalPrice: 65000, category: "aksesoris", desc: "Semua aksesoris lengkap", icon: "fa-diamond", color: "from-amber-500 to-yellow-500" },
+    // UANG
+    { id: 150, name: "500k Uang (Sea 1)", originalPrice: 3000, category: "uang", desc: "500 ribu Beli di Sea 1", icon: "fa-money", color: "from-green-600 to-emerald-500" },
+    { id: 151, name: "1jt Uang (Sea 1)", originalPrice: 5000, category: "uang", desc: "1 juta Beli di Sea 1", icon: "fa-money", color: "from-green-600 to-emerald-500" },
+    { id: 152, name: "5jt Uang (Sea 1)", originalPrice: 20000, category: "uang", desc: "5 juta Beli di Sea 1", icon: "fa-money", color: "from-green-600 to-emerald-500" },
+    { id: 153, name: "500k Uang (Sea 2)", originalPrice: 4000, category: "uang", desc: "500 ribu Beli di Sea 2", icon: "fa-money", color: "from-green-600 to-emerald-500" },
+    { id: 154, name: "1jt Uang (Sea 2)", originalPrice: 6000, category: "uang", desc: "1 juta Beli di Sea 2", icon: "fa-money", color: "from-green-600 to-emerald-500" },
+    { id: 155, name: "5jt Uang (Sea 2)", originalPrice: 24000, category: "uang", desc: "5 juta Beli di Sea 2", icon: "fa-money", color: "from-green-600 to-emerald-500" },
+    { id: 156, name: "500k Uang (Sea 3)", originalPrice: 4000, category: "uang", desc: "500 ribu Beli di Sea 3", icon: "fa-money", color: "from-green-600 to-emerald-500" },
+    { id: 157, name: "1jt Uang (Sea 3)", originalPrice: 7000, category: "uang", desc: "1 juta Beli di Sea 3", icon: "fa-money", color: "from-green-600 to-emerald-500" },
+    { id: 158, name: "5jt Uang (Sea 3)", originalPrice: 27000, category: "uang", desc: "5 juta Beli di Sea 3", icon: "fa-money", color: "from-green-600 to-emerald-500" },
+    // BAHAN
+    { id: 160, name: "100 Tulang", originalPrice: 2000, category: "bahan", desc: "100 Bones", icon: "fa-cubes", color: "from-gray-600 to-gray-500" },
+    { id: 161, name: "100 Ektoplasma", originalPrice: 3000, category: "bahan", desc: "100 Ectoplasm", icon: "fa-cubes", color: "from-gray-600 to-gray-500" },
+    { id: 162, name: "100 Kulit", originalPrice: 2000, category: "bahan", desc: "100 Leather", icon: "fa-cubes", color: "from-gray-600 to-gray-500" },
+    { id: 163, name: "100 Besi Tua", originalPrice: 2000, category: "bahan", desc: "100 Scrap Metal", icon: "fa-cubes", color: "from-gray-600 to-gray-500" },
+    { id: 164, name: "100 Ekor Ikan", originalPrice: 2000, category: "bahan", desc: "100 Fish Tail", icon: "fa-cubes", color: "from-gray-600 to-gray-500" },
+    { id: 165, name: "100 Bijih Magma", originalPrice: 2000, category: "bahan", desc: "100 Magma Ore", icon: "fa-cubes", color: "from-gray-600 to-gray-500" },
+    { id: 166, name: "100 Kayu Roh", originalPrice: 2000, category: "bahan", desc: "100 Spirit Wood", icon: "fa-cubes", color: "from-gray-600 to-gray-500" },
+    // PAKET
+    { id: 200, name: "🎁 Paket Pemula", originalPrice: 20000, category: "paket", desc: "Sea 2 ke Sea 3 + Insting penuh", icon: "fa-gift", color: "from-pink-500 to-rose-500" },
+    { id: 201, name: "🎁 Paket CDK", originalPrice: 34000, category: "paket", desc: "Yama + Tushita + mastery 350 + semua misi CDK", icon: "fa-gift", color: "from-pink-500 to-rose-500" },
+    { id: 202, name: "🎁 Paket Fighting Style", originalPrice: 36000, category: "paket", desc: "Godhuman + Sharkman Karate + Electric Claw", icon: "fa-gift", color: "from-pink-500 to-rose-500" },
+    { id: 203, name: "🎁 Paket Pedang (3 pcs)", originalPrice: 41000, category: "paket", desc: "Maksimal 3 pedang pilihan. Tambah 9k kalau mau mastery penuh", icon: "fa-gift", color: "from-pink-500 to-rose-500" },
+    { id: 204, name: "🎁 Paket Senjata (3 pcs)", originalPrice: 41000, category: "paket", desc: "Maksimal 3 senjata pilihan. Tambah 9k kalau mau mastery penuh", icon: "fa-gift", color: "from-pink-500 to-rose-500" },
+    { id: 205, name: "🎁 Paket Naikin Race", originalPrice: 9000, category: "paket", desc: "Naikin V2 & V3", icon: "fa-gift", color: "from-pink-500 to-rose-500" },
+    { id: 206, name: "🎁 Paket Serbu", originalPrice: 8000, category: "paket", desc: "10x Raid selesai + 10k Fragmen siap pakai", icon: "fa-gift", color: "from-pink-500 to-rose-500" },
+    { id: 207, name: "🎁 Paket Pro Player", originalPrice: 41000, category: "paket", desc: "Level 2800 + Haki Pelangi + Insting + Uang 2jt + Fragmen 5k + semua pedang dasar + aura + Race V3 gratis", icon: "fa-gift", color: "from-pink-500 to-rose-500" },
+    { id: 208, name: "🎁 LEVEL 1 - MAKSIMAL", originalPrice: 72000, category: "paket", desc: "Level 1-2800 + semua laut + Insting + Soul Guitar + CDK + TTK + Hallow Scythe + 1 Race V4 + semua skill", icon: "fa-gift", color: "from-pink-500 to-rose-500" }
+];
+
+// Apply discount ke semua produk
+const products = productsRaw.map(p => ({
+    ...p,
+    price: applyDiscount(p.originalPrice),
+    originalPrice: p.originalPrice
+}));
+
+// ==================== GLOBAL ====================
+let cart = [];
+let orders = [];
+let reviews = [];
+let storeStatus = true;
+
+function loadData() {
+    let savedCart = localStorage.getItem('yakzzz_cart');
+    if (savedCart) cart = JSON.parse(savedCart);
+    let savedOrders = localStorage.getItem('yakzzz_orders');
+    if (savedOrders) orders = JSON.parse(savedOrders);
+    let savedReviews = localStorage.getItem('yakzzz_reviews');
+    if (savedReviews) reviews = JSON.parse(savedReviews);
+    let savedStatus = localStorage.getItem('yakzzz_store_status');
+    if (savedStatus !== null) storeStatus = savedStatus === 'true';
+    updateCartBadge();
+    updateOrderBadge();
+    renderReviews();
+    renderProducts();
+    updateStats();
+    updateStoreStatusUI();
+}
+
+function saveCart() { localStorage.setItem('yakzzz_cart', JSON.stringify(cart)); }
+function saveOrders() { localStorage.setItem('yakzzz_orders', JSON.stringify(orders)); }
+function saveReviews() { localStorage.setItem('yakzzz_reviews', JSON.stringify(reviews)); }
+
+function updateCartBadge() { 
+    let totalQty = cart.reduce((s,i)=>s+i.quantity,0);
+    document.getElementById('cartBadge').innerText = totalQty; 
+}
+function updateOrderBadge() { document.getElementById('orderBadge').innerText = orders.filter(o=>o.status!=='selesai').length; }
+
+function updateStats() {
+    let completed = orders.filter(o=>o.status==='selesai').length;
+    let customers = [...new Set(orders.map(o=>o.username))].length;
+    document.getElementById('totalOrdersStat').innerText = completed;
+    document.getElementById('totalCustomersStat').innerText = customers;
+}
+
+function updateStoreStatusUI() {
+    let userDot = document.getElementById('userStatusDot');
+    let userText = document.getElementById('userStatusText');
+    let banner = document.getElementById('offlineBanner');
+    if (storeStatus) {
+        if (userDot) { userDot.classList.remove('status-offline'); userDot.classList.add('status-online'); }
+        if (userText) userText.innerText = 'ONLINE';
+        if (banner) banner.classList.add('hidden');
+    } else {
+        if (userDot) { userDot.classList.remove('status-online'); userDot.classList.add('status-offline'); }
+        if (userText) userText.innerText = 'OFFLINE';
+        if (banner) banner.classList.remove('hidden');
+    }
+}
+
+function renderProducts() {
+    let search = document.getElementById('searchInput')?.value.toLowerCase() || '';
+    let activeTab = document.querySelector('[data-tab].tab-active-premium')?.dataset.tab || 'all';
+    let filtered = products.filter(p => {
+        let matchSearch = p.name.toLowerCase().includes(search) || p.desc.toLowerCase().includes(search);
+        let matchTab = activeTab === 'all' || p.category === activeTab;
+        return matchSearch && matchTab;
+    });
+    let grid = document.getElementById('productGrid');
+    if (!grid) return;
+    
+    grid.innerHTML = filtered.map(p => {
+        let discountAmount = p.originalPrice - p.price;
+        let discountPercent = Math.round((discountAmount / p.originalPrice) * 100);
+        
+        return `
+        <div class="card-premium p-3 animate-fade-in relative">
+            <div class="discount-badge">-${discountPercent}%</div>
+            <div class="flex items-start gap-2 mb-2">
+                <div class="product-icon bg-gradient-to-br ${p.color} flex items-center justify-center text-white text-xl">
+                    <i class="fa ${p.icon}"></i>
+                </div>
+                <div class="flex-1">
+                    <h4 class="font-bold text-white text-sm">${p.name}</h4>
+                    <p class="text-[9px] text-gray-400 line-clamp-2">${p.desc}</p>
+                </div>
+            </div>
+            <div class="flex justify-between items-center mt-2">
+                <div>
+                    <span class="price-original">Rp ${p.originalPrice.toLocaleString()}</span>
+                    <span class="price-final ml-1">Rp ${p.price.toLocaleString()}</span>
+                </div>
+                <button onclick="addToCart(${p.id})" class="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-black font-bold px-3 py-1.5 rounded-lg text-xs transition shadow-sm">
+                    <i class="fa fa-shopping-cart mr-1"></i> Beli
+                </button>
+            </div>
+        </div>
+    `}).join('');
+}
+
+function addToCart(id) {
+    if (!storeStatus) {
+        Swal.fire({icon:'warning',title:'Toko Sedang Offline',text:'Pesan tetap bisa masuk, akan diproses nanti ya!',background:'#1a1a3e',color:'#fff'});
+    }
+    let product = products.find(p=>p.id===id);
+    if(!product) return;
+    let existing = cart.find(i=>i.id===id);
+    if(existing) existing.quantity++;
+    else cart.push({...product, quantity:1});
+    saveCart();
+    updateCartBadge();
+    Swal.fire({icon:'success',title:'Ditambahkan!',text:product.name,timer:1200,showConfirmButton:false,toast:true,position:'top-end',background:'#1a1a3e',color:'#fff'});
+}
+
+function openCart() {
+    let modal = document.getElementById('cartModal');
+    let itemsDiv = document.getElementById('cartItems');
+    let subtotalSpan = document.getElementById('cartSubtotal');
+    let discountSpan = document.getElementById('cartDiscount');
+    let totalSpan = document.getElementById('cartTotal');
+    
+    if(cart.length===0){
+        itemsDiv.innerHTML='<div class="text-center py-8 text-gray-400"><i class="fa fa-shopping-cart text-4xl mb-2"></i><p>Keranjang kosong</p></div>';
+        subtotalSpan.innerText='Rp 0';
+        discountSpan.innerText='- Rp 0';
+        totalSpan.innerText='Rp 0';
+    }else{
+        itemsDiv.innerHTML=cart.map(i=>{
+            let itemSubtotal = i.price * i.quantity;
+            let itemOriginalSubtotal = i.originalPrice * i.quantity;
+            let itemDiscount = itemOriginalSubtotal - itemSubtotal;
+            return `
+            <div class="flex justify-between items-center bg-gray-800/50 p-3 rounded-xl">
+                <div>
+                    <p class="font-medium text-white text-sm">${i.name}</p>
+                    <div class="flex gap-2 mt-0.5">
+                        <span class="price-original text-[9px]">Rp ${i.originalPrice.toLocaleString()}</span>
+                        <span class="text-amber-400 text-[11px] font-bold">Rp ${i.price.toLocaleString()}</span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="updateQty(${i.id},${i.quantity-1})" class="w-6 h-6 rounded-full bg-gray-700 hover:bg-gray-600 text-white text-sm font-bold">-</button>
+                    <span class="text-white text-xs font-medium">${i.quantity}</span>
+                    <button onclick="updateQty(${i.id},${i.quantity+1})" class="w-6 h-6 rounded-full bg-gray-700 hover:bg-gray-600 text-white text-sm font-bold">+</button>
+                    <button onclick="removeFromCart(${i.id})" class="text-red-400 ml-1 hover:text-red-300"><i class="fa fa-trash"></i></button>
+                </div>
+            </div>`;
+        }).join('');
+        
+        let subtotal = cart.reduce((s,i)=>s+(i.originalPrice * i.quantity),0);
+        let total = cart.reduce((s,i)=>s+(i.price * i.quantity),0);
+        let discount = subtotal - total;
+        
+        subtotalSpan.innerText=`Rp ${subtotal.toLocaleString()}`;
+        discountSpan.innerText=`- Rp ${discount.toLocaleString()}`;
+        totalSpan.innerText=`Rp ${total.toLocaleString()}`;
+    }
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+
+function updateQty(id,qty){ if(qty<=0) removeFromCart(id); else{ let item=cart.find(i=>i.id===id); if(item) item.quantity=qty; saveCart(); updateCartBadge(); openCart(); } }
+function removeFromCart(id){ cart=cart.filter(i=>i.id!==id); saveCart(); updateCartBadge(); openCart(); }
+function closeCart(){ let modal=document.getElementById('cartModal'); if(modal){ modal.classList.add('hidden'); modal.classList.remove('flex'); } }
+
+function showJokiForm(){ if(cart.length===0){ Swal.fire({icon:'warning',title:'Keranjang kosong!',text:'Tambahkan item dulu',background:'#1a1a3e',color:'#fff'}); return; } closeCart(); document.getElementById('jokiFormModal').classList.remove('hidden'); document.getElementById('jokiFormModal').classList.add('flex'); }
+function closeJokiForm(){ let modal=document.getElementById('jokiFormModal'); if(modal){ modal.classList.add('hidden'); modal.classList.remove('flex'); } }
+
+function toggleTutorial(){
+    let content=document.getElementById('tutorialContent');
+    let icon=document.getElementById('tutorialIcon');
+    if(content.style.maxHeight === '0px' || content.style.maxHeight === ''){
+        content.style.maxHeight = content.scrollHeight + 'px';
+        if(icon) icon.style.transform = 'rotate(180deg)';
+    }else{
+        content.style.maxHeight = '0px';
+        if(icon) icon.style.transform = 'rotate(0deg)';
+    }
+}
+
+function validateBackupFields() {
+    let backup1 = document.getElementById('formBackup1').value.trim();
+    let backup2 = document.getElementById('formBackup2').value.trim();
+    let backup3 = document.getElementById('formBackup3').value.trim();
+    let statusText = document.getElementById('backupStatusText');
+    
+    let input1 = document.getElementById('formBackup1');
+    let input2 = document.getElementById('formBackup2');
+    let input3 = document.getElementById('formBackup3');
+    
+    if (backup1 !== "") { input1.classList.remove('input-invalid'); input1.classList.add('input-valid'); }
+    else { input1.classList.remove('input-valid'); input1.classList.add('input-invalid'); }
+    
+    if (backup2 !== "") { input2.classList.remove('input-invalid'); input2.classList.add('input-valid'); }
+    else { input2.classList.remove('input-valid'); input2.classList.add('input-invalid'); }
+    
+    if (backup3 !== "") { input3.classList.remove('input-invalid'); input3.classList.add('input-valid'); }
+    else { input3.classList.remove('input-valid'); input3.classList.add('input-invalid'); }
+    
+    let allFilled = backup1 !== "" && backup2 !== "" && backup3 !== "";
+    if (allFilled) {
+        statusText.innerHTML = '✅ 3 kolom Backup Code sudah terisi semua!';
+        statusText.classList.remove('text-red-400');
+        statusText.classList.add('text-green-400');
+    } else {
+        let emptyCount = [backup1, backup2, backup3].filter(b => b === "").length;
+        statusText.innerHTML = `⚠️ Masih ${emptyCount} kolom Backup Code kosong! WAJIB diisi semua.`;
+        statusText.classList.remove('text-green-400');
+        statusText.classList.add('text-red-400');
+    }
+}
+
+function submitJokiForm(){
+    let user = document.getElementById('formUser').value.trim();
+    let pass = document.getElementById('formPass').value.trim();
+    let note = document.getElementById('formNote').value.trim();
+    let backup1 = document.getElementById('formBackup1').value.trim();
+    let backup2 = document.getElementById('formBackup2').value.trim();
+    let backup3 = document.getElementById('formBackup3').value.trim();
+
+    let isAllBackupFilled = backup1 !== "" && backup2 !== "" && backup3 !== "";
+
+    if (!isAllBackupFilled) {
+        validateBackupFields();
+        Swal.fire({icon:'error',title:'❌ GAGAL KIRIM!',text:'WAJIB mengisi 3 kolom Backup Code SEMUANYA!',background:'#1a1a3e',color:'#fff'});
+        return false;
+    }
+
+    if (!user || !pass || !note) {
+        Swal.fire({icon:'warning',title:'Data Belum Lengkap!',text:'Lengkapi Username, Password, dan Catatan pesanan!',background:'#1a1a3e',color:'#fff'});
+        return false;
+    }
+
+    let isDataPol = backup1.toLowerCase() === "ga ada" && backup2.toLowerCase() === "ga ada" && backup3.toLowerCase() === "ga ada";
+    let backupCodeCombined = isDataPol ? "⚠️ DATPOL / TIDAK PUNYA BACKUP CODE ⚠️" : `${backup1} | ${backup2} | ${backup3}`;
+
+    let total = cart.reduce((s,i)=>s+(i.price * i.quantity),0);
+    let originalTotal = cart.reduce((s,i)=>s+(i.originalPrice * i.quantity),0);
+    let items = cart.map(i=>`${i.name} x${i.quantity}`).join(', ');
+    
+    orders.unshift({
+        id: Date.now(),
+        username: user,
+        items: items,
+        total: total,
+        originalTotal: originalTotal,
+        discount: originalTotal - total,
+        note: note,
+        backupCode: backupCodeCombined,
+        status: 'menunggu',
+        createdAt: new Date().toISOString()
+    });
+    saveOrders();
+    cart = [];
+    saveCart();
+    updateCartBadge();
+    updateOrderBadge();
+    updateStats();
+    closeJokiForm();
+    
+    Swal.fire({
+        icon: 'success',
+        title: '✅ FORMAT LENGKAP!',
+        html: `Total Awal: <span class="line-through text-gray-400">Rp ${originalTotal.toLocaleString()}</span><br>Diskon 20%: <span class="text-green-400">- Rp ${(originalTotal-total).toLocaleString()}</span><br>Total Bayar: <span class="text-amber-400 font-bold">Rp ${total.toLocaleString()}</span><br><br>Lanjut ke pembayaran`,
+        background: '#1a1a3e',
+        color: '#fff'
+    }).then(()=>{
+        document.getElementById('paymentModal').classList.remove('hidden');
+        document.getElementById('paymentModal').classList.add('flex');
+    });
+}
+
+function closePaymentModal(){ let modal=document.getElementById('paymentModal'); if(modal){ modal.classList.add('hidden'); modal.classList.remove('flex'); } }
+
+function openOrders(){
+    let userOrders=orders.filter(o=>true);
+    if(userOrders.length===0){ Swal.fire({icon:'info',title:'Belum Ada Pesanan',text:'Kamu belum memiliki riwayat pesanan',background:'#1a1a3e',color:'#fff'}); return; }
+    let html='<div class="space-y-3 max-h-96 overflow-y-auto">';
+    userOrders.forEach(o=>{ 
+        html+=`<div class="bg-gray-800 p-3 rounded-xl border-l-4 ${o.status==='menunggu'?'border-amber-500':o.status==='proses'?'border-blue-500':'border-green-500'}">
+            <div class="flex justify-between"><span class="font-bold text-white text-sm">${escapeHtml(o.username)}</span><span class="badge-${o.status}">${o.status==='menunggu'?'Menunggu':o.status==='proses'?'Diproses':'Selesai'}</span></div>
+            <p class="text-xs text-gray-300 mt-1">${o.items}</p>
+            <p class="text-xs text-gray-400 mt-1"><span class="line-through">Rp ${o.originalTotal?.toLocaleString() || o.total.toLocaleString()}</span> → <span class="text-amber-400 font-bold">Rp ${o.total.toLocaleString()}</span></p>
+            <p class="text-[9px] text-gray-500 mt-1">${new Date(o.createdAt).toLocaleString()}</p>
+        </div>`; 
+    });
+    html+='</div>';
+    Swal.fire({title:'Riwayat Pesanan',html:html,confirmButtonText:'Tutup',confirmButtonColor:'#fbbf24',background:'#1a1a3e',color:'#fff'});
+}
+
+function openReviewModal(){
+    Swal.fire({title:'⭐ Tulis Review',html:`<input id="reviewName" class="swal2-input" placeholder="Nama kamu" style="background:#2a2a4a;color:#fff"><textarea id="reviewText" class="swal2-textarea" placeholder="Pengalaman order di YAKKZZ STORE..." rows="3" style="background:#2a2a4a;color:#fff"></textarea><div class="flex justify-center gap-1 mt-2">${[1,2,3,4,5].map(s=>`<span class="star-rating" data-rating="${s}" style="font-size:28px;cursor:pointer;color:#cbd5e1;">☆</span>`).join('')}</div><input type="hidden" id="reviewRating" value="5">`,showCancelButton:true,confirmButtonText:'Kirim Review',confirmButtonColor:'#fbbf24',background:'#1a1a3e',preConfirm:()=>{ let name=document.getElementById('reviewName').value; let text=document.getElementById('reviewText').value; let rating=document.getElementById('reviewRating').value; if(!name||!text){ Swal.showValidationMessage('Nama dan review harus diisi!'); return false; } return{name,text,rating:parseInt(rating)}; },didOpen:()=>{ document.querySelectorAll('.star-rating').forEach(star=>{ star.addEventListener('click',function(){ let rating=this.dataset.rating; document.getElementById('reviewRating').value=rating; document.querySelectorAll('.star-rating').forEach((s,i)=>{ s.textContent=i<rating?'★':'☆'; s.style.color=i<rating?'#facc15':'#cbd5e1'; }); }); }); }}).then(result=>{ if(result.isConfirmed){ reviews.unshift({id:Date.now(),name:result.value.name,text:result.value.text,rating:result.value.rating,date:new Date().toISOString()}); saveReviews(); renderReviews(); Swal.fire({icon:'success',title:'Terima Kasih!',text:'Review Anda telah dikirim',timer:1500,showConfirmButton:false,background:'#1a1a3e',color:'#fff'}); } });
+}
+
+function renderReviews(){ let container=document.getElementById('reviewsDisplay'); if(!container) return; if(reviews.length===0){ container.innerHTML='<div class="text-center py-4 text-gray-400 text-sm">Belum ada review. Jadi yang pertama!</div>'; return; } container.innerHTML=reviews.slice(0,5).map(r=>`<div class="bg-gray-800 rounded-xl p-3"><div class="flex justify-between items-start"><div><p class="font-bold text-white text-sm">${escapeHtml(r.name)}</p><div class="flex text-amber-400 text-xs mt-0.5">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div></div><span class="text-[9px] text-gray-500">${new Date(r.date).toLocaleDateString('id-ID')}</span></div><p class="text-xs text-gray-300 mt-1">${escapeHtml(r.text)}</p></div>`).join(''); }
+
+function escapeHtml(s){ if(!s) return ''; return s.replace(/[&<>]/g,function(m){ if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+
+// ADMIN
+function showAdminLogin(){ 
+    Swal.fire({title:'Login Admin',input:'password',inputPlaceholder:'Masukkan password admin',showCancelButton:true,confirmButtonText:'Login',confirmButtonColor:'#fbbf24',background:'#1a1a3e',color:'#fff',preConfirm:(pass)=>{ if(pass==='yagatau'){ document.getElementById('adminMode').classList.remove('hidden'); document.getElementById('userMode').classList.add('hidden'); renderAdminOrders(); renderAdminReviews(); updateAdminStats(); }else{ Swal.showValidationMessage('Password salah!'); } }}); 
+}
+function logoutAdmin(){ document.getElementById('adminMode').classList.add('hidden'); document.getElementById('userMode').classList.remove('hidden'); }
+function showAdminTab(tab){ document.getElementById('adminOrdersContainer').classList.toggle('hidden',tab!=='orders'); document.getElementById('adminReviewsContainer').classList.toggle('hidden',tab!=='reviews'); document.getElementById('adminTabOrdersBtn').classList.toggle('tab-active-premium',tab==='orders'); document.getElementById('adminTabReviewsBtn').classList.toggle('tab-active-premium',tab==='reviews'); }
+function renderAdminOrders(){ let container=document.getElementById('adminOrdersList'); if(!container) return; if(orders.length===0){ container.innerHTML='<div class="text-center py-8 text-gray-400">Belum ada pesanan</div>'; return; } container.innerHTML=orders.map(o=>`<div class="bg-gray-800 rounded-xl p-4"><div class="flex justify-between items-start"><div><p class="font-bold text-white">${escapeHtml(o.username)}</p><p class="text-xs text-gray-400 mt-0.5">${new Date(o.createdAt).toLocaleString()}</p></div><select onchange="updateOrderStatus(${o.id},this.value)" class="bg-gray-700 text-white text-xs font-medium rounded-lg px-3 py-1.5 border border-gray-600"><option value="menunggu" ${o.status==='menunggu'?'selected':''}>Menunggu</option><option value="proses" ${o.status==='proses'?'selected':''}>Diproses</option><option value="selesai" ${o.status==='selesai'?'selected':''}>Selesai</option></select></div><p class="text-sm text-gray-300 mt-2"><span class="text-gray-400">Pesanan:</span> ${o.items}</p><p class="text-sm text-gray-300"><span class="text-gray-400">Catatan:</span> ${escapeHtml(o.note)}</p><p class="text-sm text-gray-300"><span class="text-gray-400">Backup Code:</span> <span class="text-amber-400">${o.backupCode||'GADA'}</span></p><p class="text-sm"><span class="text-gray-400 line-through">Rp ${o.originalTotal?.toLocaleString() || o.total.toLocaleString()}</span> → <span class="text-amber-400 font-bold">Rp ${o.total.toLocaleString()}</span></p></div>`).join(''); }
+function renderAdminReviews(){ let container=document.getElementById('adminReviewsList'); if(!container) return; if(reviews.length===0){ container.innerHTML='<div class="text-center py-8 text-gray-400">Belum ada review</div>'; return; } container.innerHTML=reviews.map(r=>`<div class="bg-gray-800 rounded-xl p-4"><div class="flex justify-between"><p class="font-bold text-white">${escapeHtml(r.name)}</p><span class="text-[10px] text-gray-500">${new Date(r.date).toLocaleString()}</span></div><div class="text-amber-400 text-sm mt-1">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div><p class="text-sm text-gray-300 mt-2">${escapeHtml(r.text)}</p><button onclick="deleteReview(${r.id})" class="text-red-400 text-xs mt-2 hover:text-red-300"><i class="fa fa-trash"></i> Hapus</button></div>`).join(''); }
+function updateOrderStatus(id,status){ let order=orders.find(o=>o.id===id); if(order){ order.status=status; saveOrders(); renderAdminOrders(); updateAdminStats(); } }
+function deleteReview(id){ reviews=reviews.filter(r=>r.id!==id); saveReviews(); renderAdminReviews(); }
+function updateAdminStats(){ let menunggu=orders.filter(o=>o.status==='menunggu').length; let proses=orders.filter(o=>o.status==='proses').length; let selesai=orders.filter(o=>o.status==='selesai').length; let totalDana=orders.filter(o=>o.status==='selesai').reduce((s,o)=>s+o.total,0); document.getElementById('adminMenungguCount').innerText=menunggu; document.getElementById('adminProsesCount').innerText=proses; document.getElementById('adminSelesaiCount').innerText=selesai; document.getElementById('adminTotalDana').innerText=`Rp ${totalDana.toLocaleString()}`; }
+function toggleStoreStatus(){ storeStatus=!storeStatus; localStorage.setItem('yakzzz_store_status',storeStatus); let toggle=document.getElementById('adminStatusToggle'); let text=document.getElementById('adminStatusText'); if(storeStatus){ toggle.classList.add('active'); text.innerText='ONLINE'; text.classList.remove('text-red-400'); text.classList.add('text-green-400'); }else{ toggle.classList.remove('active'); text.innerText='OFFLINE'; text.classList.remove('text-green-400'); text.classList.add('text-red-400'); } updateStoreStatusUI(); }
+
+document.getElementById('searchInput')?.addEventListener('input',()=>renderProducts());
+document.querySelectorAll('[data-tab]').forEach(btn=>{ btn.addEventListener('click',function(){ document.querySelectorAll('[data-tab]').forEach(b=>b.classList.remove('tab-active-premium')); this.classList.add('tab-active-premium'); renderProducts(); }); });
+
+loadData();
+</script>
+</body>
+</html>
